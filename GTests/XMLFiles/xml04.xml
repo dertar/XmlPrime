@@ -1,0 +1,44 @@
+<root>
+ <intervals>
+   <interval>
+     <low> 0 </low>
+     <high> 10</high>
+   </interval>
+   <interval>
+      <low> 100</low>
+      <high> 110 </high>
+   </interval>
+      <interval>
+      <low> 200</low>
+      <high> 210</high>
+   </interval>
+      <interval>
+      <low> 300</low>
+      <high> 310</high>
+   </interval>
+      <interval>
+      <low> 400</low>
+      <high> 410</high>
+   </interval>
+      <interval>
+     <low> 500 </low>
+     <high> 510</high>
+   </interval>
+   <interval>
+      <low> 600</low>
+      <high> 610 </high>
+   </interval>
+      <interval>
+      <low> 700</low>
+      <high> 710</high>
+   </interval>
+      <interval>
+      <low> 800</low>
+      <high> 810</high>
+   </interval>
+      <interval>
+      <low> 900</low>
+      <high> 910</high>
+   </interval>
+  </intervals>
+</root>

@@ -1,0 +1,21 @@
+<root>
+ <intervals>
+   <interval>
+     <low> 0 </low>
+     <high> 25000</high>
+   </interval>
+   <interval>
+      <low> 25001</low>
+      <high> 50000</high>
+   </interval>
+   
+      <interval>
+      <low> 50001</low>
+      <high> 75000</high>
+   </interval>
+      <interval>
+      <low> 75001</low>
+      <high> 100000</high>
+   </interval>
+  </intervals>
+</root>
