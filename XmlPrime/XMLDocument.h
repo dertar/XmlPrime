@@ -7,17 +7,17 @@ class XMLDocument
 {
 public:
 	explicit XMLDocument(const std::string &rootName = "root");
-	explicit XMLDocument(XMLNode *root);
+	explicit XMLDocument(Node *root);
 
 	~XMLDocument();
 	// gets root of document
-	XMLNode* root() const;
-	// clears XML, returns count of deleted XMLNodes, root name will stay
+	Node* root() const;
+	// clears XML, returns count of deleted XMLNode<std::string>s, root name will stay
 	unsigned int clear();
 
 private:
-	XMLNode *_root = NULL;
-	// recursive algorithm to delete tree of XMLNode
-	void destroy(XMLNode *node, std::stack<XMLNode*> *nodes, unsigned int &count);
+	Node *_root = nullptr;
+	// recursive algorithm to destroy the tree
+	void destroy(Node *node, std::stack<Node*> *nodes, unsigned int &count);
 };
 

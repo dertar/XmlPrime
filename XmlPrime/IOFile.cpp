@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "IOFile.h"
-
+#include "Exception.h"
 
 std::string IOFile::read(const std::string & file)
 {
@@ -9,7 +9,7 @@ std::string IOFile::read(const std::string & file)
 	
 	if (!readStream.is_open()) 
 	{
-		throw std::exception("IOFile error read file");
+		throw Exception("IOFile error read file", __LINE__, __FILE__, __FUNCTION__);
 	}
 	
 	std::stringstream buffer;
@@ -18,7 +18,7 @@ std::string IOFile::read(const std::string & file)
 	if (readStream.bad())
 	{
 		readStream.close();
-		throw std::exception("IOFile error bad bit");
+		throw Exception("IOFile error bad bit", __LINE__, __FILE__, __FUNCTION__);
 	}
 
 	readStream.close();
@@ -32,7 +32,7 @@ void IOFile::write(const std::string &fileName, const std::string &data)
 
 	if (!out.is_open())
 	{
-		throw std::exception("IOFile error open file to write");
+		throw Exception("IOFile error open file to write", __LINE__, __FILE__, __FUNCTION__);
 	}
 
 	out << data;
@@ -41,7 +41,7 @@ void IOFile::write(const std::string &fileName, const std::string &data)
 	if (out.bad())
 	{
 		out.close();
-		throw std::exception("IOFile error bad bit");
+		throw Exception("IOFile error bad bit", __LINE__, __FILE__, __FUNCTION__);
 	}
 
 	out.close();

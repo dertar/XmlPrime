@@ -3,9 +3,14 @@
 #include<algorithm>
 
 #include "XMLNode.h"
-#include "XMLConvertor.h"
 #include "ThreadPrimeFinder.h"
 #include "ThreadSafeVector.h"
+#include "XMLDocument.h"
+#include "XMLNodeFactory.h"
+#include "ConverterIntervals.h"
+#include "ConverterPlainToXML.h"
+#include "ConverterXMLToPlain.h"
+#include "Exception.h"
 
 class XMLPrime
 {
@@ -19,18 +24,15 @@ public:
 	~XMLPrime();
 
 private:
-	// scrap the intervals from XMLNode to comfortable container
-	std::vector<std::pair<unsigned int, unsigned int>> *getIntervals(XMLNode *intervals);
-	
+
 	// pushes intervals in thread tasks
 	void pushTasks(std::vector< std::pair<unsigned int, unsigned int> >* intervals);
 
 	// generate string data to XMLNode
-	std::string *getStringData();
+	std::string getStringData();
 
 	ThreadSafeVector<unsigned int> *vec;
 	ThreadPrimeFinder *pool;
-	XMLConvertor *converter;
-
+	XMLNodeFactory *factory;
 };
 

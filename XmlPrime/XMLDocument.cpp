@@ -3,12 +3,12 @@
 
 
 XMLDocument::XMLDocument(const std::string &rootName) 
-	: XMLDocument(new XMLNode(rootName))
+	: XMLDocument(new Node(rootName))
 {
 	
 }
 
-XMLDocument::XMLDocument(XMLNode *root)
+XMLDocument::XMLDocument(Node *root)
 {
 	this->_root = root;
 }
@@ -21,21 +21,21 @@ XMLDocument::~XMLDocument()
 
 unsigned int XMLDocument::clear()
 {
-	auto nodes = new std::stack<XMLNode*>();
+	auto nodes = new std::stack<Node*>();
 	unsigned int ret = 0;
-	std::string name = this->_root->getName();
+	std::string name = this->_root->getKey();
 
 
 	this->destroy(this->_root, nodes, ret);
 
 	delete nodes;
 
-	this->_root = new XMLNode(name);
+	this->_root = new Node(name);
 
 	return ret;
 }
 
-void XMLDocument::destroy(XMLNode *node, std::stack<XMLNode*> *nodes, unsigned int &count)
+void XMLDocument::destroy(Node *node, std::stack<Node*> *nodes, unsigned int &count)
 {
 	if (!node)
 	{
@@ -65,10 +65,7 @@ void XMLDocument::destroy(XMLNode *node, std::stack<XMLNode*> *nodes, unsigned i
 	destroy(node->getNext(), nodes, count);
 }
 
-XMLNode * XMLDocument::root() const
+Node* XMLDocument::root() const
 {
 	return this->_root;
 }
-
-
-

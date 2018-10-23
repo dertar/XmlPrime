@@ -11,7 +11,7 @@ TEST(TestXMLDocument, TestXMLDocAddChild) {
 	auto xml = new XMLDocument();
 	auto interval = xml->root()->addChild("interval");
 
-	ASSERT_EQ(interval->getName(), "interval");
+	ASSERT_EQ(interval->getKey(), "interval");
 
 	delete xml;
 }
@@ -59,8 +59,8 @@ TEST(TestXMLDocument, TestXMLDocGet)
 	auto child = xml->root()->addChild("child");
 	auto child1 = xml->root()->addChild("child1");
 
-	ASSERT_TRUE(xml->root()->get("child") == child);
-	ASSERT_TRUE(xml->root()->get("child1") == child1);
+	ASSERT_TRUE(xml->root()->findFirstChild("child") == child);
+	ASSERT_TRUE(xml->root()->findFirstChild("child1") == child1);
 
 	delete xml;
 }

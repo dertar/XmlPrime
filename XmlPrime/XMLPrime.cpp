@@ -4,28 +4,32 @@
 
 std::string XMLPrime::get(std::string &rawXml, const bool sorts, const bool removeDuplicates)
 {
-	auto xmlIntervals = converter->toXML(rawXml);
+	Converter<std::string, Node*> toXML;
+	Converter<Node*, std::string> toStr;
 
-	auto root = xmlIntervals->root();
+	auto root = toXML.convert(rawXml);
 
-	if (root->getName() != "root")
-		throw std::exception("incorrect root node");
+	if (root->getKey() != "root")
+		throw Exception("incorrect root node", __LINE__, __FILE__, __FUNCTION__);
 
-	auto intervals = root->get("intervals");
+	auto intervals = root->findFirstChild("intervals");
 
-	if (intervals == nullptr || intervals->getName() != "intervals")
-		throw std::exception("incorrect intervals node");
-
+	if (intervals == nullptr || intervals->getKey() != "intervals")
+		throw Exception("incorrect intervals node", __LINE__, __FILE__, __FUNCTION__);
+	
 	auto intervalsChild = intervals->getChild();
 
-	if (intervalsChild == nullptr || intervalsChild->getName() != "interval")
-		throw std::exception("incorrect interval node");
+	if (intervalsChild == nullptr || intervalsChild->getKey() != "interval")
+		throw Exception("incorrect interval node", __LINE__, __FILE__, __FUNCTION__);
 
-	auto inters = this->getIntervals(intervalsChild);
+	ConverterIntervals c;
+	
+	auto inters = c.convert(intervalsChild);
 
-	this->pushTasks(inters);
+	this->pushTasks(&inters);
 
-	delete inters;
+	inters.clear();
+
 	this->vec->clear();
 
 	pool->join();
@@ -40,20 +44,20 @@ std::string XMLPrime::get(std::string &rawXml, const bool sorts, const bool remo
 	auto data = this->getStringData();
 
 	XMLDocument out("root");
-	out.root()->addChild("primes")->setData(*data);
-	auto outXml = converter->toPlain(&out);
+	
+	auto primes = out.root()->addChild(
+		this->factory->createNode<std::string>("primes", data)
+	);
+	
+	auto outXml = toStr.convert(out.root(), "\n", "\t");
 
-	delete data;
-	delete xmlIntervals;
-	std::string copy(*outXml);
-	delete outXml;
-	return copy;
+	return outXml;
 }
 
 XMLPrime::XMLPrime(const unsigned int threads)
 {
-	this->converter = XMLConvertor::getIntance();
-	
+	this->factory = XMLNodeFactory::getInstance();
+
 	this->vec = new ThreadSafeVector<unsigned int>();
 	this->pool = new ThreadPrimeFinder(this->vec, threads);
 }
@@ -63,37 +67,6 @@ XMLPrime::~XMLPrime()
 {
 }
 
-std::vector<std::pair<unsigned int, unsigned int>>* XMLPrime::getIntervals(XMLNode *intervals)
-{
-	auto ret = new std::vector<std::pair<unsigned int, unsigned int>>();
-
-	while (intervals != nullptr)
-	{
-		auto low = intervals->getChild();
-		auto high = low->getNext()->getData();
-		try
-		{
-			unsigned int  uLow = std::stoul(*low->getData(), nullptr, 0);
-			unsigned int uHigh = std::stoul(*high, nullptr, 0);
-
-			if (uLow >= uHigh)
-				throw std::exception("error data low bound is bigger then high bound");
-			
-			ret->push_back(
-				std::pair<unsigned int, unsigned int>(uLow, uHigh)
-			);
-		}
-		catch (...)
-		{
-			delete ret;
-			throw std::current_exception();
-		}
-
-		intervals = intervals->getNext();
-	}
-
-	return ret;
-}
 
 void XMLPrime::pushTasks(std::vector< std::pair<unsigned int, unsigned int> >* intervals)
 {
@@ -103,13 +76,13 @@ void XMLPrime::pushTasks(std::vector< std::pair<unsigned int, unsigned int> >* i
 	}
 }
 
-std::string * XMLPrime::getStringData()
+std::string XMLPrime::getStringData()
 {
-	auto ret = new std::string();
+	std::string ret;
 
 	for (auto it = vec->begin(); it != vec->end(); ++it)
 	{
-		*ret += (std::to_string(*it) + " ");
+		ret += (std::to_string(*it) + " ");
 	}
 
 	return ret;

@@ -1,40 +1,80 @@
 #pragma once
 
-
-class XMLNode
+#include "Node.h"
+// node with data
+template <typename T>
+class XMLNode : public Node
 {
 public:
-	explicit XMLNode(const std::string &name);
-	XMLNode(const std::string &name, const std::string &val);
-	XMLNode(const std::string &name, const std::string *val);
+	explicit XMLNode<T>(const std::string &key) : Node(key) { }
 
-	~XMLNode();
+	XMLNode<T>(const std::string &key, const T &val) : Node(key)
+	{
+		this->val = val; // copyable object
+		this->_hasData = true;
+	}
 
-	XMLNode* get(const std::string &key);
+	void setValue(const T &data) noexcept
+	{
+		this->_hasData = true;
+		this->val = data;
+	}
 
-	XMLNode* addChild(const std::string &key);
-	XMLNode* addChild(const std::string &key, const std::string &val);
-	XMLNode* addChild(const std::string &key, const std::string *val);
-	XMLNode* addChild(XMLNode  *node);
+	bool hasData() const noexcept
+	{
+		return this->_hasData;
+	}
 
-	XMLNode* addNext(XMLNode *node);
-	void setData(const std::string &data);
+	T& getVal() noexcept
+	{
+		return this->val;
+	}
 
-	XMLNode* getLast();
-	XMLNode* getNext() const;
-	XMLNode* getChild() const;
-
-	bool hasChild() const;
-	bool hasNext() const;
-	bool hasData() const;
-
-	const std::string& getName() const;
-	const std::string* getData() const;
+	~XMLNode()
+	{
+	}
 
 private:
-	std::string *key = nullptr;
-	std::string *val = nullptr;
-
-	XMLNode *next = nullptr;
-	XMLNode *child = nullptr;
+	T val;
+	bool _hasData = false;
 };
+
+// Node for pointers
+//template <typename T>
+//class XMLNode<T*> : public XMLNode<T>
+//{
+//public:
+//	
+//	XMLNode<T>(const std::string &key, const T &val) : Node(key)
+//	{
+//		this->val = new T(*val);
+//	}
+//
+//	void setValue(const T &data) noexcept
+//	{
+//		if(this->val != nullptr)
+//			delete this->val;
+//
+//		this->val = new T(data);
+//	}
+//
+//	bool hasData() const noexcept
+//	{
+//		return this->val != nullptr;
+//	}
+//
+//	T& getVal() const noexcept
+//	{
+//		return *this->val;
+//	}
+//
+//	~XMLNode()
+//	{
+//		if (this->hasData())
+//			delete val;
+//	}
+//
+//private:
+//	T *val = nullptr;
+//};
+//

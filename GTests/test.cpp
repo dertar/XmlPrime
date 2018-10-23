@@ -128,6 +128,7 @@ TEST(TestXMLPrime, TestXMLPrimeMaxDataViceVersa)
 
 TEST(TestXMLPrime, TestXMLPrimeMaxDataDuplicate)
 {
+
 	XMLPrime prime;
 	std::string xml = "<root><intervals><interval><low>0</low><high>10</high></interval><interval><low>0</low><high>10</high></interval></intervals></root>";
 	auto x = prime.get(xml, true, false);
@@ -196,6 +197,15 @@ TEST(TestSpeed, TestSpeedOneVsFour)
 
 	ASSERT_GT(oneTime, twoTime);
 	timer.start();
+}
+
+TEST(TestSpeed, TestSpeedOne)
+{
+	auto rawXml = IOFile::read("../GTests//XMLFiles//xml03.xml");
+
+	XMLPrime multi(1);
+
+	auto outXml1 = multi.get(rawXml);
 }
 
 TEST(TestSpeed, TestSpeedTwo)
