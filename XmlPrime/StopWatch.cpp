@@ -19,7 +19,7 @@ long long StopWatch::get() const noexcept
 	return this->lastDuration;
 }
 
-StopWatch::StopWatch()
+StopWatch::StopWatch() : lastDuration(0)
 {
 }
 

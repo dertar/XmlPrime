@@ -9,6 +9,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <memory>
 
 template <>
 class Converter <std::string, Node*>
@@ -27,54 +28,59 @@ private:
 
 	XMLNodeFactory* factory;
 
+	using pair = std::pair<std::string, TYPE>;
+	using sp_pair = std::unique_ptr< pair >;
+
 	// parse a text into chunks and translate them into the drafts
-	std::vector < std::pair<std::string, TYPE>* >* parse(const std::string &from);
+	// return smart pointer of (vector) of (pair) of braket's name and type
+	std::unique_ptr< std::vector<sp_pair> > parse(const std::string &from);
 
-	// checks queue for correct brackets
-	void checkQueue(std::vector < std::pair<std::string, TYPE>* >* queue);
+	// checks queue for correct brackets 
+	void checkQueue(std::unique_ptr<std::vector<sp_pair> > &queue);
 
-	std::vector<std::string> split(const std::string &text, char delim);
+	// splits text by delim
+	std::vector<std::string> split(const std::string &text, char delim) const;
 
-	
+	// validate methods for bracket's name and data
 	bool checkData(const std::string &data) const noexcept;
 	bool checkBracketName(const std::string &data) const noexcept;
 
-	// recreation from drafts to XMLDocument
-	Node* createXML(std::vector < std::pair<std::string, Converter <std::string, Node*>::TYPE>* >* queue);
+	// recreation XMLDocument from drafts 
+	// smart pointer passes by value, in next step it doesn't need
+	Node* createXML(std::unique_ptr<std::vector<sp_pair> >  queue);
 	
 	bool isNumber(const std::string &s);
 };
 
-inline std::vector<std::pair<std::string, Converter<std::string, Node*>::TYPE>*>* Converter<std::string, Node*>::parse(const std::string &from)
+inline std::unique_ptr< std::vector < Converter<std::string, Node*>::sp_pair > > Converter<std::string, Node*>::parse(const std::string &from)
 {
 	auto lems = this->split(from, '<');
+
 	// remove empty element
 	lems.erase(lems.begin(), lems.begin() + 1);
 
 	if (lems.size() == 0)
-		throw Exception("Parse XML: error", __LINE__, __FILE__, __FUNCTION__);
+		throw Exception("Parse XML: nothing to parse", __LINE__, __FILE__, __FUNCTION__);
 
-	auto queue = new std::vector < std::pair<std::string, TYPE>* >();
+	auto queue = std::make_unique< std::vector<sp_pair> >();
 
 	for (auto &x : lems)
 	{
 		auto l = this->split(x, '>');
 
-		int size = l.size();
+		auto size = l.size();
 
 		if (size == 0)
-		{
-			delete queue;
 			throw Exception("Parse XML: error", __LINE__, __FILE__, __FUNCTION__);
-		}
 
 		if (size >= 1)
 		{
-			auto bracket = new std::pair<std::string, TYPE>();
+			auto bracket = std::make_unique<pair>();
 
 			if (l.at(0).at(0) == '/')
 			{
 				bracket->second = TYPE::CLOSED;
+				//removing first character - slash 
 				bracket->first = l.at(0).substr(1, l.at(0).size());
 			}
 			else
@@ -82,17 +88,18 @@ inline std::vector<std::pair<std::string, Converter<std::string, Node*>::TYPE>*>
 				bracket->second = TYPE::OPEN;
 				bracket->first = l.at(0);
 			}
-			queue->push_back(bracket);
 
+			queue->push_back(std::move(bracket));
+			
+			// bracket has data
 			if (size == 2)
 			{
 				if (l.at(1).empty())
 					throw Exception("Parse XML: error", __LINE__, __FILE__, __FUNCTION__);
 
-				auto data = new std::pair<std::string, TYPE>();
-				data->second = TYPE::DATA;
-				data->first = l.at(1);
-				queue->push_back(data);
+				auto data = std::make_unique<pair>(l.at(1), TYPE::DATA);
+
+				queue->push_back(std::move(data));
 			}
 		}
 
@@ -101,15 +108,14 @@ inline std::vector<std::pair<std::string, Converter<std::string, Node*>::TYPE>*>
 	return queue;
 }
 
-inline void Converter<std::string, Node*>::checkQueue(std::vector<std::pair<std::string, TYPE>*>* queue)
+inline void Converter<std::string, Node*>::checkQueue(std::unique_ptr< std::vector < sp_pair > > &queue)
 {
-	auto stack = std::stack< std::pair<std::string, TYPE>* >();
+	auto stack = std::stack<sp_pair>();
 
-	for (auto el : *queue)
+	for (auto const &el : *queue)
 	{
 		if (el->second == TYPE::DATA)
 		{
-			
 			if (!this->checkData(el->first))
 				throw Exception("Parse XML: the data has errors", __LINE__, __FILE__, __FUNCTION__);
 		}
@@ -118,19 +124,20 @@ inline void Converter<std::string, Node*>::checkQueue(std::vector<std::pair<std:
 			if (stack.empty())
 				throw Exception("Parse XML: brackets aren't correct", __LINE__, __FILE__, __FUNCTION__);
 
-			auto top = stack.top();
-			
+			auto top = std::move(stack.top());
+
 			if (top->first != el->first || top->second == el->second)
 				throw Exception("Parse XML: brackets aren't correct", __LINE__, __FILE__, __FUNCTION__);
-
+			
 			stack.pop();
 		}
 		else
 		{
 			if (!this->checkBracketName(el->first))
 				throw Exception("Parse XML: the bracket's name has errors", __LINE__, __FILE__, __FUNCTION__);;
-
-			stack.push(el);
+			
+			auto copy = std::make_unique<pair>(el->first, el->second);
+			stack.push(std::move(copy));
 		}
 	}
 
@@ -139,7 +146,7 @@ inline void Converter<std::string, Node*>::checkQueue(std::vector<std::pair<std:
 
 }
 
-inline std::vector<std::string> Converter<std::string, Node*>::split(const std::string & text, char delim)
+inline std::vector<std::string> Converter<std::string, Node*>::split(const std::string & text, char delim) const
 {
 	std::vector<std::string> lems;
 	std::string lem;
@@ -163,11 +170,11 @@ inline bool Converter<std::string, Node*>::checkBracketName(const std::string & 
 	return true;
 }
 
-inline Node * Converter<std::string, Node*>::createXML(std::vector<std::pair<std::string, Converter<std::string, Node*>::TYPE>*>* queue)
+inline Node * Converter<std::string, Node*>::createXML(std::unique_ptr<std::vector<sp_pair> > queue)
 {
 	auto stack = new std::stack<Node*>();
 
-	for (auto x : *queue)
+	for (auto &x : *queue)
 	{
 		if (x->second == TYPE::CLOSED)
 		{
@@ -187,7 +194,6 @@ inline Node * Converter<std::string, Node*>::createXML(std::vector<std::pair<std
 		{
 			auto node = new Node(x->first);
 			stack->push(node);
-
 		}
 		else if (x->second == TYPE::DATA)
 		{
@@ -230,14 +236,7 @@ inline Node * Converter<std::string, Node*>::convert(std::string &from)
 
 	this->checkQueue(parsedQueue);
 
-	auto ret = this->createXML(parsedQueue);
-
-	for (auto &x : *parsedQueue)
-	{
-		delete x;
-	}
-
-	delete parsedQueue;
+	auto ret = this->createXML(std::move(parsedQueue));
 
 	return ret;
 }

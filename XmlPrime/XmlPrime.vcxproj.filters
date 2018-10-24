@@ -13,52 +13,70 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Converters">
+      <UniqueIdentifier>{9c610760-9dad-49ac-958c-585ba31d8ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\XMLNode">
+      <UniqueIdentifier>{3e4f97c3-e260-41df-b53d-580a0a2ab944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Thread">
+      <UniqueIdentifier>{4ea8fd5f-8727-4715-8b1a-63a74912e6ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{2b106110-0d3a-4143-bcd3-60d596266968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XMLDocument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IOFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadSafeVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadPrimeFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLPrime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StopWatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLNodeFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Converter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Converters</Filter>
     </ClInclude>
     <ClInclude Include="ConverterIntervals.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Converters</Filter>
     </ClInclude>
     <ClInclude Include="ConverterPlainToXML.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Converters</Filter>
     </ClInclude>
     <ClInclude Include="ConverterXMLToPlain.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Converters</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\XMLNode</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLNode.h">
+      <Filter>Header Files\XMLNode</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLDocument.h">
+      <Filter>Header Files\XMLNode</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLNodeFactory.h">
+      <Filter>Header Files\XMLNode</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLPrime.h">
+      <Filter>Header Files\XMLNode</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>Header Files\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadSafeQueue.h">
+      <Filter>Header Files\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadSafeSet.h">
+      <Filter>Header Files\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadSafeVector.h">
+      <Filter>Header Files\Thread</Filter>
     </ClInclude>
     <ClInclude Include="Exception.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IOFile.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,12 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IOFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadSafeVector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadPrimeFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -99,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

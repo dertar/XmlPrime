@@ -1,0 +1,24 @@
+<root> 
+ <intervals>
+   <interval>
+     <low> 0 </low>
+     <high> 1073741823</high>
+   </interval>
+   <interval>
+      <low> 1073741824</low>
+      <high> 2147483647</high>
+   </interval>
+   
+      <interval>
+      <low> 2147483648</low>
+      <high> 3221225471</high>
+   </interval>
+      <interval>
+      <low> 3221225472</low>
+      <high> 4294967295</high>
+   </interval>
+  </intervals>
+  <warning>
+	don't do this
+  </warning>
+</root>

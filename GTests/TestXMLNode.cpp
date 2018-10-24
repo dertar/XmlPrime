@@ -60,7 +60,6 @@ TEST(TestNode, TestNodeHasNext)
 }
 
 
-
 TEST(TestNode, TestNodeHasChild)
 {
 	auto node = new XMLNode<int>("root");

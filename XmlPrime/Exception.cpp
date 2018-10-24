@@ -3,11 +3,9 @@
 
 
 Exception::Exception(const std::string & message, unsigned int line, const std::string & fileName, const std::string & funcName)
+	: msg(message), line(line), fileName(fileName), funcName(funcName)
 {
-	this->msg = message;
-	this->line = line;
-	this->fileName = fileName;
-	this->funcName = funcName;
+
 }
 
 unsigned int Exception::getLine()

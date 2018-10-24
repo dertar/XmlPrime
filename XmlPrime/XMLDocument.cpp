@@ -21,49 +21,53 @@ XMLDocument::~XMLDocument()
 
 unsigned int XMLDocument::clear()
 {
-	auto nodes = new std::stack<Node*>();
-	unsigned int ret = 0;
+	auto vec = new std::vector<Node*>();
 	std::string name = this->_root->getKey();
 
 
-	this->destroy(this->_root, nodes, ret);
+	this->destroy(this->_root, vec);
 
-	delete nodes;
+	auto ret = vec->size();
 
+	for (std::vector<Node*>::iterator it = vec->begin();
+		it != vec->end(); ++it) 
+	{
+		delete *it;
+	}
+
+	vec->clear();
+	delete vec;
+
+	delete this->_root;
 	this->_root = new Node(name);
 
-	return ret;
+	return ret + 1;
 }
 
-void XMLDocument::destroy(Node *node, std::stack<Node*> *nodes, unsigned int &count)
+void XMLDocument::destroy(Node *node, std::vector<Node*> *nodes)
 {
 	if (!node)
 	{
-		if (nodes->empty())
-			return;
-		
-		while (!nodes->empty())
-		{
-			node = nodes->top();
-			nodes->pop();
-			delete node;
-
-			count++;
-		}
-
 		return;
 	}
 
-	nodes->push(node);
+	//nodes->push(node);
 
 	if (node->hasChild())
 	{
-		destroy(node->getChild(), nodes, count);
-		return;
+		nodes->push_back(node->getChild());
 	}
+
+	if (node->hasNext())
+	{
+		nodes->push_back(node->getNext());
+	}
+
+	destroy(node->getChild(), nodes);
+	destroy(node->getNext(), nodes);
 	
-	destroy(node->getNext(), nodes, count);
 }
+
 
 Node* XMLDocument::root() const
 {

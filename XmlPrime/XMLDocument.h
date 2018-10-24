@@ -2,6 +2,7 @@
 
 #include "XMLNode.h"
 #include <stack>
+#include <vector>
 
 class XMLDocument
 {
@@ -18,6 +19,6 @@ public:
 private:
 	Node *_root = nullptr;
 	// recursive algorithm to destroy the tree
-	void destroy(Node *node, std::stack<Node*> *nodes, unsigned int &count);
+	void destroy(Node *node, std::vector<Node*>* vec);
 };
 

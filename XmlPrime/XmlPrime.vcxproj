@@ -46,7 +46,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -160,7 +160,9 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StopWatch.h" />
-    <ClInclude Include="ThreadPrimeFinder.h" />
+    <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="ThreadSafeQueue.h" />
+    <ClInclude Include="ThreadSafeSet.h" />
     <ClInclude Include="ThreadSafeVector.h" />
     <ClInclude Include="XMLDocument.h" />
     <ClInclude Include="XMLNode.h" />
@@ -179,8 +181,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StopWatch.cpp" />
-    <ClCompile Include="ThreadPrimeFinder.cpp" />
-    <ClCompile Include="ThreadSafeVector.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
     <ClCompile Include="XMLNode.cpp" />
     <ClCompile Include="main.cpp" />

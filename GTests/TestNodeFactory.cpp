@@ -2,6 +2,32 @@
 #include "../XmlPrime/XMLNode.h"
 #include "../XmlPrime/XMLNodeFactory.h"
 
+
+TEST(TestNodeFactory, TestNodeFactoryTest)
+{
+	auto factory = XMLNodeFactory::getInstance();
+
+	auto node = new XMLNode<std::string>("root");
+	auto child = node->addChild(new XMLNode<std::string>("child", "data"));
+
+
+	delete child;
+	delete node;
+}
+
+TEST(TestNodeFactory, TestNodeField)
+{
+	auto factory = XMLNodeFactory::getInstance();
+
+	auto node = new XMLNode<std::string>("root");
+	auto child = node->addChild(new XMLNode<std::string>("child", "data"));
+
+	//factory->f<int>(child);
+
+	delete child;
+	delete node;
+}
+
 TEST(TestNodeFactory, TestNodeFactoryHasString)
 {
 	auto factory = XMLNodeFactory::getInstance();
@@ -141,4 +167,16 @@ TEST(TestNode, TestNodeField1)
 
 	delete intervals;
 	delete node;
+}
+
+TEST(TestNodeFactory, TestNodeDocument)
+{
+	auto factory = XMLNodeFactory::getInstance();
+
+	//auto node = factory->createSNode<int>("root");
+
+	//auto child = factory->createSNode<int>("child");
+
+	//node->addChild(child.get);
+	
 }

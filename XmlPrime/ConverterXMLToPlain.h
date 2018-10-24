@@ -10,14 +10,11 @@ class Converter <Node*, std::string>
 {
 public:
 
-
 	Converter()
 	{
 		this->factory = XMLNodeFactory::getInstance();
 	}
 
-	// newline will be added in every brackets and data's,
-	// tabs will be added in every new line, count of tabs will be depends on depths of current bracket/data
 	std::string convert(Node *from)
 	{
 		this->init();
@@ -27,6 +24,8 @@ public:
 		return this->plain;
 	}
 
+	// newline will be added in every brackets and data's,
+	// tabs will be added in every new line, count of tabs will be depends on depths of current bracket/data
 	std::string convert(Node *from, const std::string &newLine, const std::string &tab)
 	{
 		this->newline = newLine;
@@ -35,10 +34,11 @@ public:
 		return this->convert(from);
 	}
 
-
 private:
-
+	// don't do that
+	// maybe leaks resources
 	std::stack <Node*> nodes;
+
 	std::string plain;
 
 	std::string newline;
@@ -80,9 +80,7 @@ inline void Converter<Node*, std::string>::genPlain(Node * node)
 	}
 	else if (!this->factory->isSimpleNode(node))
 	{
-
 		this->putData(node);
-
 		this->pop();
 	}
 
@@ -123,23 +121,20 @@ inline std::string Converter<Node*, std::string>::genTabs()
 
 inline void Converter<Node*, std::string>::putData(Node *node)
 {
-	//if (!this->factory->isSimpleNode(node))
+	Converter<unsigned int, std::string> c;
+
+	std::string data;
+	if (this->factory->isData<unsigned int>(node))
 	{
-		Converter<unsigned int, std::string> c;
-
-		std::string data;
-		if (this->factory->isData<unsigned int>(node))
-		{
-			data = c.convert(this->factory->getData<unsigned int>(node));
-		}
-		else if (this->factory->isData<std::string>(node))
-		{
-			data = this->factory->getData<std::string>(node);
-		}
-
-		if(!data.empty())
-			this->plain += (this->genTabs() + data + this->newline);
+		data = c.convert(this->factory->getData<unsigned int>(node));
 	}
+	else if (this->factory->isData<std::string>(node))
+	{
+		data = this->factory->getData<std::string>(node);
+	}
+
+	if(!data.empty())
+		this->plain += (this->genTabs() + data + this->newline);
 }
 
 inline void Converter<Node*, std::string>::init()
@@ -149,5 +144,11 @@ inline void Converter<Node*, std::string>::init()
 	this->depth = 0;
 
 	while (!this->nodes.empty())
+	{
+		auto node = this->nodes.top();
 		this->nodes.pop();
+		
+		delete node;
+	}
+	
 }

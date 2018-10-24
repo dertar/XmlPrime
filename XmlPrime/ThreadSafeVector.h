@@ -4,24 +4,23 @@
 #include <vector>
 #include <algorithm>
 
-
-template <typename T>
+template <typename T, typename M = std::recursive_mutex>
 class ThreadSafeVector
 {
 private:
-	mutable std::recursive_mutex mutex;
+	mutable M mutex;
 	std::vector<T> vec;
 public:
 
 	void add(T el)
 	{
-		std::lock_guard<std::recursive_mutex> lock(mutex);
+		std::lock_guard<M> lock(this->mutex);
 		this->vec.push_back(el);
 	}
 
 	T at(unsigned int i) const
 	{
-		std::lock_guard<std::recursive_mutex> lock(mutex);
+		std::lock_guard<M> lock(mutex);
 		return this->vec.at(i);
 	}
 
@@ -30,12 +29,12 @@ public:
 		return vec.size();
 	}
 
-	void lock()
+	void lock() const
 	{
 		this->mutex.lock();
 	}
 
-	void unlock()
+	void unlock() const
 	{
 		this->mutex.unlock();
 	}
@@ -52,7 +51,7 @@ public:
 
 	void clear()
 	{
-		std::lock_guard<std::recursive_mutex> lock(mutex);
+		std::lock_guard<M> lock(mutex);
 		this->vec.clear();
 	}
 
@@ -60,10 +59,11 @@ public:
 	{
 		return this->vec.erase();
 	}
+	
 
-	//must be sorted
 	void removeDuplicates()
 	{
+		std::sort(this->vec.begin(), this->vec.end());
 		this->vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
 	}
 

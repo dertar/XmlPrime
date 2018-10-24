@@ -1,0 +1,37 @@
+<root>
+ <intervals>
+   <interval>
+     <low> 0 </low>
+     <high> 100000</high>
+   </interval>
+   <interval>
+      <low> 100000</low>
+      <high> 200000</high>
+   </interval>
+   
+      <interval>
+      <low> 300000</low>
+      <high> 500000</high>
+   </interval>
+      <interval>
+      <low> 800000</low>
+      <high> 1300000</high>
+   </interval>
+         <interval>
+      <low> 2100000</low>
+      <high> 3400000</high>
+   </interval>
+            <interval>
+      <low> 5500000</low>
+      <high> 8900000</high>
+   </interval>
+            <interval>
+      <low> 14400000</low>
+      <high>23300000</high>
+   </interval>
+               <interval>
+      <low> 14400000</low>
+      <high>23300000</high>
+   </interval>
+  </intervals>
+</root>

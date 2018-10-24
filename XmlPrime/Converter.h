@@ -2,6 +2,11 @@
 #include <string>
 #include "Exception.h"
 
+// class that helps to convert data types
+// more complex converters handed down in another .h files
+
+
+// by reference from
 template <typename F, typename T>
 class Converter
 {
@@ -14,32 +19,15 @@ public:
 		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
 	}
 
-	// todo: variadic templates 
-	virtual T convert(F &from, const std::string &first, const std::string &second)
+	// if we need extra args
+	template<class... Args>
+	T convert(F &from, Args&&... args)
 	{
 		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
 	}
 };
 
-template <typename F, typename T>
-class Converter<F, T*>
-{
-public:
-	Converter() {};
-	virtual ~Converter() {};
-
-	virtual T convert(F *from)
-	{
-		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
-	}
-
-	// todo: variadic templates 
-	virtual T convert(F *from, const std::string &first,const std::string &second)
-	{
-		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
-	}
-};
-
+// by pointer from
 template <typename F, typename T>
 class Converter<F*, T>
 {
@@ -52,8 +40,8 @@ public:
 		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
 	}
 
-	// todo: variadic templates 
-	virtual T convert(F *from, const std::string &first, const std::string &second)
+	template<class... Args>
+	T convert(F *from, Args&&... args)
 	{
 		throw Exception("not implemented", __LINE__, __FILE__, __FUNCTION__);
 	}

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../XmlPrime/XMLDocument.h"
-
+#include "../XmlPrime/IOFile.h"
+#include "../XmlPrime/XMLPrime.h"
 
 TEST(TestXMLDocument, TestXMLDocCreation) {
 	auto xml = new XMLDocument();
@@ -31,8 +32,24 @@ TEST(TestXMLDocument, TestXMLDocClear1)
 	delete xml;
 }
 
-
 TEST(TestXMLDocument, TestXMLDocClear2)
+{
+	auto text = IOFile::read("../GTests//XMLFiles//xml06.xml");
+	XMLPrime prime(1);
+
+	Converter<std::string, Node*> toXML;
+	auto xml = new XMLDocument(toXML.convert(text));
+
+	auto size = xml->clear();
+
+
+	ASSERT_EQ(7, size);
+
+	delete xml;
+}
+
+
+TEST(TestXMLDocument, TestXMLDocClear3)
 {
 	auto xml = new XMLDocument();
 	auto child = xml->root()->addChild("child");
@@ -52,6 +69,11 @@ TEST(TestXMLDocument, TestXMLDocDispose)
 
 	ASSERT_NO_FATAL_FAILURE( delete xml );
 }
+
+
+
+
+
 
 TEST(TestXMLDocument, TestXMLDocGet)
 {

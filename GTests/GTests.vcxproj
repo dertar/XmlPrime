@@ -45,8 +45,8 @@
     </ClCompile>
     <ClCompile Include="TestIOFile.cpp" />
     <ClCompile Include="TestNodeFactory.cpp" />
-    <ClCompile Include="TestThreadPrimeFinder.cpp" />
-    <ClCompile Include="TestThreadSafeVector.cpp" />
+    <ClCompile Include="TestThreadPool.cpp" />
+    <ClCompile Include="TestThreadSafeContainer.cpp" />
     <ClCompile Include="TestXMLConverter.cpp" />
     <ClCompile Include="TestXMLDocument.cpp" />
     <ClCompile Include="TestXMLNode.cpp" />

@@ -15,6 +15,12 @@ public:
 	}
 
 	template <typename T>
+	std::unique_ptr<XMLNode<T> > createSmartNode(const std::string &key)
+	{
+		return std::make_unique<XMLNode<T>>(key);//std::move(std::make_unique<Node>(key));
+	}
+
+	template <typename T>
 	XMLNode<T>* createNode(const std::string &key, const T &val)
 	{
 		return new XMLNode<T>(key, val);
@@ -55,6 +61,8 @@ public:
 
 		XMLNode<T>* casted = static_cast<XMLNode<T>*> (node);
 		return casted->getVal();
+
+		
 	}
 
 	bool isSimpleNode(Node *node)
@@ -83,9 +91,13 @@ public:
 	~XMLNodeFactory() {}
 private:
 	static XMLNodeFactory *instance;
-	XMLNodeFactory& operator=(XMLNodeFactory&) = delete;
-	XMLNodeFactory(const XMLNodeFactory&) = delete;
 
+	// todo: how to provide safity for Nodes
+	//std::vector< std::shared_ptr<Node> > nodes;
+
+	XMLNodeFactory(const XMLNodeFactory &) = delete;
+
+	XMLNodeFactory& operator=(const XMLNodeFactory &) = delete;
 	XMLNodeFactory() {}
 	
 };
